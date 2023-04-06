@@ -6,14 +6,14 @@ This script set will export iZotope RX Markerlist from Reaper project.
 Python 3.x
 argparse
 
-,,,pip install argparse,,,
+'''pip install argparse'''
 
 
 # HOW TO USE
 
 Please clone or download this repo.
 
-,,,git clone https://github.com/crackerjacques/ReaScript-Export_izotope_RX_from_reaper.git,,,
+'''git clone https://github.com/crackerjacques/ReaScript-Export_izotope_RX_from_reaper.git'''
 
 and copy scripts to your Reascript dir.
 
