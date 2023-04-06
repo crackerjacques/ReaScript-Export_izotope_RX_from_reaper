@@ -35,7 +35,9 @@ In that case, please rewrite the path in the script
 
 # __DO NOT Touch csv2rx_action.py!!__
 Because this Python script uses TKinter, some environments may crash when trying to run it from Reaper.
-,,python csv2rx_action.py -i foo.csv,,,
+
+```python csv2rx_action.py -i foo.csv```
+
 It will work if run from a command prompt or terminal like this, but so far, on both my Windows and Mac, it crashes when run from Reaper.
 
 First in Lua, output temp.csv to the script directory, then to delete crashes, start Python on the OS side, not on the Reaper side, and convert it to RX text data.
