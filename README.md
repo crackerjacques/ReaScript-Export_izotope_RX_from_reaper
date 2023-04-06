@@ -48,8 +48,6 @@ This is a problem I hope to solve soon.
 
 # Import RX Marker List to Reaper 
 
-Please visit my other repository
-
-https://github.com/crackerjacques/IzotopeRX_MarkerList_to_Reaper_CSV
+Import and run Set_Marker_and_Region_from_RX_Text.lua
 
 
