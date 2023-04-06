@@ -3,7 +3,7 @@ import tkinter as tk
 import tkinter.filedialog as filedialog
 
 def convert_csv_to_text(input_file, output_file):
-    with open(input_file, 'r') as f:
+    with open(input_file, 'r', encoding="utf-8") as f:
         lines = f.readlines()
 
     converted_lines = ['Marker file version: 1\n', 'Time format: Time\n']
@@ -17,7 +17,7 @@ def convert_csv_to_text(input_file, output_file):
             else:
                 converted_lines.append(f'{name}\t{start}\n')
 
-    with open(output_file, 'w') as f:
+    with open(output_file, 'w', encoding="utf-8") as f:
         f.writelines(converted_lines)
 
 def main(input_file, output_file):
