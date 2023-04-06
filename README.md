@@ -1,6 +1,9 @@
 # ReaScript_export_markerlist_by_izotope_RX_format
 This script set will export iZotope RX Markerlist from Reaper project.
 
+![IMG](https://github.com/crackerjacques/ReaScript-Export_izotope_RX_from_reaper/blob/main/01.png?raw=true)
+
+
 # Requirements
 
 Python 3.x
@@ -20,7 +23,7 @@ Please clone or download this repo.
 git clone https://github.com/crackerjacques/ReaScript-Export_izotope_RX_from_reaper.git
 ```
 
-and copy scripts to your Reascript dir.
+and copy all scripts to your Reascript dir.
 
 Select　__MarkerList4RX.lua__　 and Hit Start.
 
