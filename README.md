@@ -25,13 +25,12 @@ git clone https://github.com/crackerjacques/ReaScript-Export_izotope_RX_from_rea
 
 and copy all scripts to your Reascript dir.
 
-Select　__MarkerList4RX.lua__　 and Hit Start.
 
+Select　__MarkerList4RX.lua__　 and Hit Start.
 Then Open dialogue, You must name file and done.
 
 If the Python path or ReaScript path is not default, it may not work.
 In that case, please rewrite the path in the script
-
 
 
 # __DO NOT Touch csv2rx_action.py!!__
