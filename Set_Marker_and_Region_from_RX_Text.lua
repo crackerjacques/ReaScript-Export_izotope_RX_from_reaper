@@ -1,36 +1,44 @@
-function timecode_to_seconds(timecode)
-    local hh, mm, ss, ff = timecode:match("(%d+):(%d+):(%d+):(%d+)")
-    return tonumber(hh) * 3600 + tonumber(mm) * 60 + tonumber(ss) + tonumber(ff) / 100
-end
+function parse_file(file_path)
+    local markers = {}
+    local regions = {}
+    local file = io.open(file_path, "r")
+    if not file then return nil end
 
-function read_file(filename)
-    local f = assert(io.open(filename, "r"))
-    local content = f:read("*all")
-    f:close()
-    return content
-end
-
-local function process_lines(lines)
-    for _, line in ipairs(lines) do
-        local marker_name, start_time, end_time = line:match("^(%w*)%s*(%d+:%d+:%d+:%d+)%s*(%d+:%d+:%d+:%d+)*")
-        if marker_name and start_time then
-            start_time = timecode_to_seconds(start_time)
-            if end_time then
-                end_time = timecode_to_seconds(end_time)
-                reaper.AddProjectMarker2(0, true, start_time, end_time, marker_name, -1, 0)
-            else
-                reaper.AddProjectMarker(0, false, start_time, marker_name, -1, 0)
-            end
+    for line in file:lines() do
+        local time_start, time_end = line:match("(%d+:%d+%.%d+)%s*(%d*:?%d*%.?%d*)")
+        if time_end == "" or time_end == nil then
+            table.insert(markers, time_start)
+        else
+            table.insert(regions, {time_start, time_end})
         end
     end
+    file:close()
+    return markers, regions
 end
 
-local retval, file_path = reaper.GetUserFileNameForRead("", "Select RX marker list file", ".txt")
-if retval then
-    local file_content = read_file(file_path)
-    local lines = {}
-    for line in file_content:gmatch("[^\r\n]+") do
-        table.insert(lines, line)
+function add_markers_and_regions(markers, regions)
+    local color = reaper.ColorToNative(255, 0, 0) -- Set color to red
+    for i, marker_time in ipairs(markers) do
+        local position = reaper.parse_timestr_pos(marker_time, 2) -- 2 for Time format
+        reaper.AddProjectMarker(0, false, position, 0, "Marker " .. i, -1, color)
     end
-    process_lines(lines)
+    for i, region in ipairs(regions) do
+        local start_pos = reaper.parse_timestr_pos(region[1], 2)
+        local end_pos = reaper.parse_timestr_pos(region[2], 2)
+        reaper.AddProjectMarker(0, true, start_pos, end_pos, "Region " .. i, -1, color)
+    end
+end
+
+local retval, file_path = reaper.GetUserFileNameForRead("", "Select a text file with markers and regions", ".txt")
+if retval then
+    local markers, regions = parse_file(file_path)
+    if markers and regions then
+        reaper.Undo_BeginBlock()
+        add_markers_and_regions(markers, regions)
+        reaper.Undo_EndBlock("Import markers and regions from text file", -1)
+    else
+        reaper.ShowMessageBox("Failed to read the file", "Error", 0)
+    end
+else
+    reaper.ShowMessageBox("No file selected", "Cancelled", 0)
 end
