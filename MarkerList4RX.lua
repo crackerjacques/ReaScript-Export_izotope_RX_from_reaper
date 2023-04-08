@@ -1,5 +1,17 @@
 ---Please put csv2rx_action.py in your reascript directory before use.
 
+local function find_python_path()
+    local python_path = nil
+
+    if reaper.file_exists("/usr/local/bin/python") then
+        python_path = "/usr/local/bin/python"
+    elseif reaper.file_exists("/usr/bin/python") then
+        python_path = "/usr/bin/python"
+    end
+
+    return python_path
+end
+
 local reaper_scripts_path = reaper.GetResourcePath() .. "/Scripts/"
 local output_file_path = reaper_scripts_path .. "temp.csv"
 local file = io.open(output_file_path, "w")
@@ -23,7 +35,6 @@ file:close()
 
 local csv2rx_action_path = reaper_scripts_path .. "csv2rx_action.py"
 
--- Please set your python path
 local python_command
 if reaper.GetOS() == "Win32" or reaper.GetOS() == "Win64" then
   -- Set the Python path for Windows
@@ -31,10 +42,14 @@ if reaper.GetOS() == "Win32" or reaper.GetOS() == "Win64" then
   python_command = "C:\\Users\\" .. username .. "\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 else
   -- Set the Python path for macOS or Linux
-  python_command = "/usr/local/bin/python"
+  python_command = find_python_path()
 end
 
--- and Please put csv2rx_action.py in your script path
+if not python_command then
+  reaper.ShowMessageBox("Python not found in the system PATH.", "Error", 0)
+  return
+end
+
 local command = python_command .. " \"" .. csv2rx_action_path .. "\" -i \"" .. output_file_path .. "\""
 
 if reaper.GetOS() == "Win32" or reaper.GetOS() == "Win64" then
